@@ -92,26 +92,26 @@ app.post("/bfhl", async (req, res) => {
                 data = value.reduce((a, b) => gcd(a, b));
                 break;
 
-            case "AI":
-                if (typeof value !== "string")
-                    return res.status(400).json({ is_success: false });
+           case "AI":
+    if (typeof value !== "string" || value.trim() === "")
+        return res.status(400).json({ is_success: false });
 
-                const response = await axios.post(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-  {
-    contents: [
-      {
-        parts: [{ text: value }]
-      }
-    ]
-  }
-);
+    const response = await axios.post(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        {
+            contents: [
+                {
+                    parts: [{ text: value }]
+                }
+            ]
+        }
+    );
 
-data = response.data.candidates[0].content.parts[0].text
-  .trim()
-  .split(" ")[0];
+    data = response.data.candidates[0].content.parts[0].text
+        .trim()
+        .split(" ")[0];
+    break;
 
-                break;
 
             default:
                 return res.status(400).json({ is_success: false });
