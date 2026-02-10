@@ -92,7 +92,7 @@ app.post("/bfhl", async (req, res) => {
                 data = value.reduce((a, b) => gcd(a, b));
                 break;
 
-        case "AI":
+       case "AI":
     if (typeof value !== "string" || value.trim() === "")
         return res.status(400).json({ is_success: false });
 
@@ -101,17 +101,23 @@ app.post("/bfhl", async (req, res) => {
         {
             contents: [
                 {
-                    parts: [{ text: value }]
+                    parts: [{
+                        text: `Answer in one word only. Do not explain. Question: ${value}`
+                    }]
                 }
             ]
         }
     );
 
-    data = response.data.candidates[0].content.parts[0].text
-        .trim()
-        .split(" ")[0];
+    let rawText = response.data.candidates[0].content.parts[0].text.trim();
+
+    // Remove punctuation and extra spaces
+    rawText = rawText.replace(/[^a-zA-Z]/g, "");
+
+    data = rawText;
 
     break;
+
 
 
 
