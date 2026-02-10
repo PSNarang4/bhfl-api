@@ -121,10 +121,13 @@ app.post("/bfhl", async (req, res) => {
         });
 
     } catch (err) {
-        return res.status(500).json({
-            is_success: false
-        });
-    }
+    console.error("AI ERROR:", err.response?.data || err.message);
+
+    return res.status(500).json({
+        is_success: false,
+        error: err.response?.data || err.message
+    });
+}
 });
 
 app.listen(PORT, () => {
